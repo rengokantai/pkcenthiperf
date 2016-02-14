@@ -179,6 +179,32 @@ log file position
 /var/log/pcsd/pcsd.log
 ```
 
+enable stonith->fencing mulfunctioning node
+```
+pcs config // check stonith
+```
+enable properties syntax:
+```
+pcs property list //for brevity
+pcs property set stonith-enabled=true
+```
+
+install fencing
+```
+yum install fence-agents-all fence-virt
+pcs stonith list
+```
+
+get info of a fencing agent:
+```
+pcs stonith describe fence_ilo
+pcs stonith create Stonith_1 fence_ilo pcmk_host_list="node01" action=reboot --force
+```
+syntax:
+```
+pcs stonith create stonith_device_name stonith_device_type stonith_device_options
+pcs stonith update stonith_device_name stonith_device_options
+
 
 
 
