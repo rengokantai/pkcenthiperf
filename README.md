@@ -108,3 +108,68 @@ ssh node01
 ```
 systemctl start sshd
 ```
+
+
+
+- cp2
+create a corosync file:
+```
+cp /etc/corosync/corosync.conf.example /etc/corosync/corosync.conf
+```
+```
+systemctl enable corosync
+systemctl enable pacemaker
+systemctl start pacemaker
+```
+Perform the following operations on both nodes:
+```
+systemctl enable pacemaker
+ln -s '/usr/lib/systemd/system/pacemaker.service' '/etc/systemd/system/multi-user.target.wants/pacemaker.service'
+systemctl enable corosync
+ln -s '/usr/lib/systemd/system/corosync.service' '/etc/systemd/system/multi-user.target.wants/corosync.service'
+systemctl start pcsd
+systemctl enable pcsd
+```
+Now set the password for the hacluster Linux account, which was created automatically when PCS was installed.
+```
+passwd hacluster
+```
+troubleshooting:
+```
+journalctl -xn
+```
+
+ckeck exists of corosync
+
+```
+yum –y install net-tools && netstat -npltu | grep -i corosync
+```
+
+
+
+
+
+- cp5
+elrepo
+```
+rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
+rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-2.el7.elrepo.noarch.rpm
+```
+verify
+```
+yum repo list | grep elrepo
+```
+install modules:
+```
+yum update && yum install drbd84-utils kmod-drbd84
+lsmod | grep -i drbd
+```
+
+If it is not loaded automatically, you can load the module to the kernel on both nodes.
+```
+modprobe drbd
+```
+load during boot
+```
+echo drbd >/etc/modules-load.d/drbd.conf
+```
