@@ -173,3 +173,80 @@ load during boot
 ```
 echo drbd >/etc/modules-load.d/drbd.conf
 ```
+
+
+
+- cp6
+```
+mysqlshow dbname tablename columnname -h 192.168.0.1 -u root -p
+```
+
+list the complete set of utilities
+```
+ls /bin | grep mysql
+```
+
+mysqlslap (mysql pressure test)
+```
+--create-schema: This command specifies the database in which we will run the tests
+--query: This is a string (or alternatively, a file) containing the SELECT statements used to retrieve data
+--delimiter: This command allows you to specify a delimiter to separate multiple queries in the same string in --query
+--concurrency: This command is the number of simultaneous connections to simulate
+--iterations: This is the number of times to run the tests
+--number-of-queries: This command limits each client (refer to --concurrency) to that amount of queries
+```
+Ex: simulate 10 concurrent connections and make 50 queries overall. This will result in clients running 5 queries each (50/10 = 5):
+```
+mysqlslap --create-schema=dbname --query="SELECT * FROM tablename" --concurrency=10 --iterations=2 --number-of-queries=50 -h 192.168.0.4 -u root -p
+```
+after execution:
+```
+reset query cache;
+```
+
+mimic a failover
+```
+pcs resource defaults resource-stickiness=value
+```
+
+<??>
+Resource agents are found inside 
+```
+/usr/lib/ocf/resource.d
+```
+```
+pcs resource agents standard:provider
+```
+
+
+list all httpd modules.
+```
+httpd -M
+```
+
+configure apache:
+```
+vi /etc/httpd/conf/httpd.conf
+```
+```
+IncludeOptional conf.modules.d/*.conf
+```
+Disable the userdir module
+```
+#LoadModule userdir_module modules/mod_userdir.so
+```
+Restart the cluster resource 
+```
+pcs resource restart webserver
+```
+
+query cache type change:
+```
+SHOW VARIABLES LIKE 'query_cache_type';
+SHOW VARIABLES LIKE 'query_cache_size';
+```
+set cache size.(Setting it too high will result in performance degradation as the system will have to allocate extra resources to manage a large cache. )  
+```
+SET GLOBAL query_cache_size = 102400; //100kb
+```
+
