@@ -235,7 +235,7 @@ two_node: 1   //at least 1 to hold the quorum
 
 
 
-- cp5
+- cp4
 elrepo
 ```
 rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
@@ -259,6 +259,20 @@ load during boot
 ```
 echo drbd >/etc/modules-load.d/drbd.conf
 ```
+
+- cp5
+```
+pcs status nodes pacemaker | corosync | both
+```
+
+```
+pcs resource show virtual_ip  //or --full
+```
+to show options
+```
+pcs constraint --full
+```
+
 
 
 
