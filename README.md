@@ -204,6 +204,26 @@ syntax:
 ```
 pcs stonith create stonith_device_name stonith_device_type stonith_device_options
 pcs stonith update stonith_device_name stonith_device_options
+pcs stonith delete stonith_device_name
+```
+
+simulate a node off:
+```
+pcs cluster stop node01 
+pcs stonith fence node01 --off
+```
+enable virtual_ip
+```
+pcs resource enable virtual_ip
+```
+
+Add the following in ` /etc/corosync/corosync.conf`
+```
+quorum {
+provider: corosync_votequorum
+two_node: 1   //at least 1 to hold the quorum
+}
+```
 
 
 
