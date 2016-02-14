@@ -148,6 +148,46 @@ yum –y install net-tools && netstat -npltu | grep -i corosync
 
 
 
+- cp3
+```
+pcs status
+pcs cluster stop node01
+```
+
+check
+```
+grep virtual_ip /var/log/pacemaker.log
+```
+
+re-enable
+```
+pcs cluster start node01
+pcs resource enable virtual_ip
+```
+
+
+debug
+```
+pcs resource debug-start virtual_ip --full
+```
+
+
+log file position
+```
+/var/log/pacemaker.log
+/var/log/cluster/corosync.log
+/var/log/pcsd/pcsd.log
+```
+
+
+
+
+
+
+
+
+
+
 
 - cp5
 elrepo
